@@ -4,7 +4,7 @@ import random
 from sympy import mod_inverse
 
 class RSA:
-    def __init__(self, message):
+    def __init__(self, message=None):
         self.plain_text = message
         pass
 
@@ -42,7 +42,7 @@ class RSA:
 
         return plain_text
     
-    def result(self):
+    def generate_keys(self):
         p = self.primeGenerator() # first prime number
         q = self.primeGenerator() # second prime number
         #print(p)
@@ -54,8 +54,10 @@ class RSA:
 
         d = mod_inverse(e, phi_n)
 
-        cipher_text = self.encrypt(e, n)
+        """cipher_text = self.encrypt(e, n)
         print(f'Cipher Text-> {cipher_text}')
 
         plain_text = self.decrypt(cipher_text, d, n)
-        print(f'Plain Text-> {plain_text}') 
+        print(f'Plain Text-> {plain_text}')"""
+
+        return (e, d)
