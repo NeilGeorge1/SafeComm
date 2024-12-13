@@ -1,0 +1,27 @@
+1. Introduction:
+Overview: SafeComm is a secure messaging platform that uses RSA encryption to ensure secure communication between users. Passwords are hashed to protect user credentials.
+Purpose: To allow users to send and receive encrypted messages, ensuring confidentiality and integrity of the data.
+
+2. Use Case Diagram:
+Users can register, log in, send messages (encrypted), and receive messages (decrypted). The system provides basic authentication and message security.
+
+3. Functional Requirements:
+User Registration: Users can create accounts with usernames and passwords. The password is hashed before storage.
+User Login: Authentication based on the hashed password.
+Message Encryption: Messages are encrypted using the recipient’s RSA public key.
+Message Decryption: Messages are decrypted using the recipient’s RSA private key.
+
+4. Non-Functional Requirements:
+Security: All messages and passwords must be encrypted. RSA encryption ensures confidentiality, and passwords are stored as secure hashes (e.g., SHA-256).
+Performance: The system must efficiently handle multiple users and messages, with RSA encryption being performed only when necessary.
+Scalability: The system should be able to handle an increasing number of users and messages with minimal performance degradation.
+
+5. System Architecture:
+Client-Server Model: Users interact with a server via HTTPS. The server handles registration, login, and message encryption/decryption.
+Communication: All data transfer is secured using HTTPS (SSL/TLS), ensuring the integrity and privacy of user data.
+Backend: The backend is responsible for generating RSA key pairs, managing user data (password hashes), and handling message encryption/decryption.
+
+6. Database Design:
+User Table: Stores usernames and hashed passwords.
+Message Table: Stores encrypted messages and metadata (sender, recipient, timestamp).
+Key Storage: RSA public keys for each user are stored in the database for encryption, but private keys are never stored.
