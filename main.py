@@ -1,9 +1,15 @@
-from RSA import RSA
+from db_operations import create_table, insert_values, fetch_data, delete_rows
 
-print("Starting........")
+def main():
+    create_table()
 
-message = input("Please enter message-> ")
+    username = "john_doe"
+    password = "password123"
+    insert_values(username, password)
 
-rsa = RSA(message)
+    fetch_data()
 
-rsa.result()
+    delete_rows(1)
+
+if __name__ == '__main__':
+    main()
