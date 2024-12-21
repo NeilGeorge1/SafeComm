@@ -11,7 +11,7 @@ def create_table():
 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users(
-            user_id INTEGER PRIMARY KEY,
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT,
             password INTEGER,
             public_key INTEGER,
@@ -53,4 +53,21 @@ def delete_rows(user_id):
 
     cursor.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
     connection.commit()
+    connection.close()
+
+def check_password(username, password):
+    connection = sql.connect('users.db')
+    cursor = connection.cursor()
+    hash = fnv1.hashReturn(password)
+
+    cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
+    result = cursor.fetchone()
+
+    # If a result is returned, compare the stored password with the input hash
+    if result and result[0] == hash:
+        return True  # Password matches
+    else:
+        return False  # Password does not match or username not found
+
+    # Close the connection
     connection.close()
