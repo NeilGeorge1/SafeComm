@@ -33,7 +33,3 @@ class FNV1:
 """class MurmurHash:
     def __init__(self.message):
         pass"""
-
-fnv1 = FNV1()
-print(fnv1.hashReturn('Qwerty123'))
-print(fnv1.hashReturn('Qwerty123')) 

@@ -64,7 +64,7 @@ def check_password(username, password):
     result = cursor.fetchone()
 
     # If a result is returned, compare the stored password with the input hash
-    if result and result[0] == hash:
+    if str(result[0]) == str(hash):
         return True  # Password matches
     else:
         return False  # Password does not match or username not found

@@ -1,4 +1,5 @@
 from db_operations import create_table, insert_values, fetch_data, delete_rows, check_password
+from time import sleep
 
 def main():
     create_table()
@@ -20,15 +21,13 @@ def main():
             password = input("Enter Password-> ")
 
             print("Authenticating......")
+            sleep(2)
 
             if check_password(username, password) == True:
                 print("Authenticated!")
                 print("Welcome!!")
-                print("""
-                    /\_/\
-                    ( o.o )
-                    > ^ <
-                """)
+                print(":)")
+            
             else:
                 print("Invalid Credentials")
                 print("Please Try Again")
