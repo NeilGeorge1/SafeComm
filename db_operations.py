@@ -1,11 +1,12 @@
 import sqlite3 as sql
 from hashing import FNV1
 from RSA import RSA
+import datetime
 
 fnv1 = FNV1() 
 rsa = RSA()
 
-def create_table():
+def create_user_table():
     connection = sql.connect('users.db')
     cursor = connection.cursor()
 
@@ -21,7 +22,7 @@ def create_table():
     connection.commit()
     connection.close()
 
-def insert_values(username, password):
+def insert_user_values(username, password):
     connection = sql.connect('users.db')
     cursor = connection.cursor()
 
@@ -36,7 +37,7 @@ def insert_values(username, password):
     connection.commit()
     connection.close()
 
-def fetch_data():
+def fetch_user_data():
     connection = sql.connect('users.db')
     cursor = connection.cursor()
 
@@ -47,7 +48,7 @@ def fetch_data():
 
     connection.close()
 
-def delete_rows(user_id):
+def delete_user_rows(user_id):
     connection = sql.connect('users.db')
     cursor = connection.cursor()
 
@@ -55,7 +56,7 @@ def delete_rows(user_id):
     connection.commit()
     connection.close()
 
-def check_password(username, password):
+def check_user_password(username, password):
     connection = sql.connect('users.db')
     cursor = connection.cursor()
     hash = fnv1.hashReturn(password)
@@ -63,11 +64,65 @@ def check_password(username, password):
     cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
     result = cursor.fetchone()
 
-    # If a result is returned, compare the stored password with the input hash
     if str(result[0]) == str(hash):
-        return True  # Password matches
+        return True 
     else:
-        return False  # Password does not match or username not found
+        return False  
 
-    # Close the connection
+    connection.close()
+
+def create_session_table():
+    connection = sql.connect('users.db')
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        create table if not exists sessions(
+            session_id INT PRIMARY KEY,
+            username  TEXT,
+            create_time TEXT,
+            logged_in BOOLEAN
+        )
+    ''')
+
+    connection.commit()
+    connection.close()
+
+def insert_session_values(session_id, username):
+    connection = sql.connect('users.db')
+    cursor = connection.cursor()
+
+    create_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    logged_in = True
+
+    cursor.execute("INSERT INTO sessions (session_id, username, create_time, logged_in) VALUES (?, ?, ?, ?)",
+                   (session_id, username, create_time, logged_in))
+
+    connection.commit()
+    connection.close()
+
+def if_logged_in():
+    connection = sql.connect('users.db')
+    cursor = connection.cursor()
+
+    cursor.execute("Select logged_in from sessions")
+    rows = cursor.fetchall()
+
+    for row in rows:
+        if row[0] == 1:
+            return True
+
+    return False
+
+    connection.close()
+
+def logout_session(username):
+    connection = sql.connect('users.db')
+    cursor = connection.cursor()
+
+    logged_in = False
+    print(username)
+    cursor.execute("update sessions set logged_in = ? where username = ?", (logged_in, username))
+
+    connection.commit()
     connection.close()

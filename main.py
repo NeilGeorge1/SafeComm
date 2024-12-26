@@ -1,47 +1,26 @@
-from db_operations import create_table, insert_values, fetch_data, delete_rows, check_password
-from time import sleep
+from user import login, dashboard, register, logout
+from db_operations import if_logged_in, logout_session
 
 def main():
-    create_table()
-
     print("Welcome to SafeComm!")
-    print("Type 0 for help")
 
     while True:
-
-        condition = int(input("Enter command-> "))
-
+        condition = int(input("Enter command-> Enter 0 for help!    "))
         if condition == 0:
             print("Enter 1 for old user")
             print("Enter 2 for new user")
             print("Enter any other key to exit")
         
         elif condition == 1:
-            username = input("Enter Username-> ")
-            password = input("Enter Password-> ")
-
-            print("Authenticating......")
-            sleep(2)
-
-            if check_password(username, password) == True:
-                print("Authenticated!")
-                print("Welcome!!")
-                print(":)")
-            
-            else:
-                print("Invalid Credentials")
-                print("Please Try Again")
-        
+            username = login()
+            while True:
+                if not if_logged_in():
+                    username = login()
+                else:
+                    dashboard(username)
+                    break
         elif condition == 2:
-            print("Please enter your credentials-> ")
-            username = input("Enter Username-> ")
-            password = input("Enter Password-> ")
-
-            insert_values(username, password)
-
-            print("Succesfully made a new account!")
-            print("Please Log in")
-
+            register()
         else:
             break
 
