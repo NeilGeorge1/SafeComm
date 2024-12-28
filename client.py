@@ -1,22 +1,21 @@
 import socket
+import threading
 from threading import Thread
 from RSA import RSA
 
 HOST = "127.0.0.1"
 PORT = 55555
 
+lock = threading.Lock()
+
 def send(client_socket):
-    try:
-        while True:
-            message = input("Enter a message: ")
+    while True:
+        message = input("Enter a message: ")
 
-            if message.lower() == 'exit':
-                break
+        if message.lower() == 'exit':
+            break
 
-            client_socket.sendall(message.encode('utf-8'))
-    
-    except:
-        print(f"Error with {client_socket}")
+        client_socket.sendall(message.encode('utf-8'))
 
 def recieve(client_socket):
     while True:
@@ -38,6 +37,8 @@ def main():
     recieve_thread.start()
 
     send_thread.join()
+    recieve_thread.join()
+
     print("Chat Ended")
 
 if __name__ == "__main__":

@@ -28,11 +28,15 @@ def insert_user_values(username, password):
 
     hashed_password = fnv1.hashReturn(password)
 
-    public_key, private_key = rsa.generate_keys()
+    public_key, private_key, modulus = rsa.generate_keys()
+    
+    public_key = str(public_key)
+    private_key = str(private_key)
+    modulus = str(modulus)
 
     cursor.execute('''
-        INSERT INTO users(username, password, public_key, private_key) VALUES(?, ?, ?, ?)
-    ''', (username, hashed_password, public_key, private_key))
+        INSERT INTO users(username, password, public_key, private_key, modulus) VALUES(?, ?, ?, ?, ?)
+    ''', (username, hashed_password, public_key, private_key, modulus))
 
     connection.commit()
     connection.close()

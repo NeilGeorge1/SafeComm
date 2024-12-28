@@ -60,4 +60,4 @@ class RSA:
         plain_text = self.decrypt(cipher_text, d, n)
         print(f'Plain Text-> {plain_text}')"""
 
-        return (e, d)
+        return (e, d, n)

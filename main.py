@@ -5,7 +5,7 @@ def main():
     print("Welcome to SafeComm!")
 
     while True:
-        condition = int(input("Enter command-> Enter 0 for help!    "))
+        condition = int(input("Enter command-> Enter 0 for help! "))
         if condition == 0:
             print("Enter 1 for old user")
             print("Enter 2 for new user")

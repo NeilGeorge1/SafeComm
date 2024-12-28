@@ -1,8 +1,11 @@
 from db_operations import insert_user_values, fetch_user_data, delete_user_rows, check_user_password, insert_session_values, if_logged_in, logout_session
 from time import sleep
+import socket
 import getpass
 import secrets
-import string   
+import subprocess
+from client import main as client
+from server import main as server
 
 def generate_session_id():
     return secrets.token_hex(16)
@@ -28,13 +31,20 @@ def login():
     return username
 
 def dashboard(username):
-    number = int(input("Enter 0 to print hello, print 1 to logout-> "))
+    number = int(input("Enter 0 to chat with a user, print 1 to logout-> "))
     if number == 0:
-        print("Hello ")
+        chat()
     elif number == 1:
         logout(username)
     else:
         print("Invalid Request")
+
+def isServerRunning(host, portno):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect((host, portno)) == 0
+
+def chat():
+    client()
 
 def logout(username):
     print("Logging out.......")
