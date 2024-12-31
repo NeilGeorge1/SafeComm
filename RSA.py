@@ -4,10 +4,6 @@ import random
 from sympy import mod_inverse
 
 class RSA:
-    def __init__(self, message=None):
-        self.plain_text = message
-        pass
-
     def isPrime(self, n):
         if n <= 1:
             return False
@@ -22,9 +18,9 @@ class RSA:
             if self.isPrime(num):
                 return num
 
-    def encrypt(self, e, n):
-        cipher_text = ''
-        for c in self.plain_text:
+    def encrypt(self, plain_text, e, n):
+        cipher_text = ""
+        for c in plain_text:
             plain_num = ord(c)
             cipher_num = pow(plain_num, e, n)
             cipher_c = chr(cipher_num)
@@ -33,7 +29,7 @@ class RSA:
         return cipher_text 
 
     def decrypt(self, cipher_text, d, n):
-        plain_text = ''
+        plain_text = ""
         for c in cipher_text:
             cipher_num = ord(c)
             plain_num = pow(cipher_num, d, n)

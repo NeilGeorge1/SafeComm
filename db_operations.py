@@ -15,8 +15,9 @@ def create_user_table():
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT,
             password INTEGER,
-            public_key INTEGER,
-            private_key INTEGER
+            public_key TEXT,
+            private_key TEXT,
+            modulus INTEGER
         )
     ''')
     connection.commit()
@@ -74,6 +75,17 @@ def check_user_password(username, password):
         return False  
 
     connection.close()
+
+def extract_keys(username):
+    connection = sql.connect('users.db')
+    cursor = connection.cursor()
+
+    cursor.execute("select public_key, private_key, modulus from users where username = ?", (username, ))
+    row = cursor.fetchone()
+
+    if row:
+        e, d, n = row
+        return e, d, n
 
 def create_session_table():
     connection = sql.connect('users.db')

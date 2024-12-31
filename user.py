@@ -33,7 +33,7 @@ def login():
 def dashboard(username):
     number = int(input("Enter 0 to chat with a user, print 1 to logout-> "))
     if number == 0:
-        chat()
+        chat(username)
     elif number == 1:
         logout(username)
     else:
@@ -43,8 +43,8 @@ def isServerRunning(host, portno):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         return s.connect((host, portno)) == 0
 
-def chat():
-    client()
+def chat(username):
+    client(username)
 
 def logout(username):
     print("Logging out.......")
@@ -67,4 +67,3 @@ def register():
 
     print("Succesfully made a new account!")
     print("Please Log in")
-
