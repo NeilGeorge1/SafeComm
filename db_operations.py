@@ -69,6 +69,9 @@ def check_user_password(username, password):
     cursor.execute("SELECT password FROM users WHERE username = ?", (username,))
     result = cursor.fetchone()
 
+    if result is None:
+        return False
+
     if str(result[0]) == str(hash):
         return True 
     else:
@@ -117,20 +120,27 @@ def insert_session_values(session_id, username):
     connection.commit()
     connection.close()
 
-def if_logged_in():
+def if_logged_in(username):
     connection = sql.connect('users.db')
     cursor = connection.cursor()
 
-    cursor.execute("Select logged_in from sessions")
+    cursor.execute("Select logged_in from sessions where username = ?", (username, ))
     rows = cursor.fetchall()
 
-    for row in rows:
-        if row[0] == 1:
-            return True
+    i = len(rows) - 1
+
+    if i < 0:
+        return False
+
+    if rows[i][0] == True:
+    	return True
 
     return False
 
     connection.close()
+
+def check_session(username):
+    pass
 
 def logout_session(username):
     connection = sql.connect('users.db')

@@ -14,7 +14,7 @@ def main():
         elif condition == 1:
             username = login()
             while True:
-                if not if_logged_in():
+                if not if_logged_in(username):
                     username = login()
                 else:
                     dashboard(username)

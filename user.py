@@ -10,6 +10,9 @@ from server import main as server
 def generate_session_id():
     return secrets.token_hex(16)
 
+def expire_session_id():
+	pass
+
 def login():
     username = input("Enter Username-> ")
     password = getpass.getpass("Enter your password: ")

@@ -7,23 +7,16 @@ PORT = 55555
 client_dict= {}#username in bytes
 
 def handle_client(client_socket, client_address, other_client_socket):
-    try:
-        while True:
-            message = client_socket.recv(1024)
+    while True:
+        message = client_socket.recv(1024)
 
-            if message.decode('utf-8').lower() == 'exit' or not message:
-                break
+        if message.decode('utf-8').lower() == 'exit' or not message:
+            break
 
-            print(f"{message} received from Username: {client_dict[client_socket]}, Address:{client_address}")
+        print(f"{message.decode('utf-8')} received from Username: {client_dict[client_socket].decode('utf-8')}, Address:{client_address}")
 
-            other_client_socket.sendall(message)
+        other_client_socket.sendall(message)
 
-    except:
-        print(f"Error with {client_address}")
-
-    finally:
-        client_socket.close()
-        other_client_socket.close()
 
 def start_server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
