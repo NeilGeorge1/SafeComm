@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
 
-HOST = "127.0.0.1"
+HOST = "0.0.0.0"
 PORT = 55555
 
 client_dict= {}#username in bytes
