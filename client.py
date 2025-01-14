@@ -4,7 +4,7 @@ from RSA import RSA
 from threading import Thread
 from db_operations import extract_keys
 
-HOST = "13.53.163.90"
+HOST = "13.51.178.218"
 PORT = 55555
 
 lock = threading.Lock()
