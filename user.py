@@ -34,13 +34,17 @@ def login():
     return username
 
 def dashboard(username):
-    number = int(input("Enter 0 to chat with a user, print 1 to logout-> "))
-    if number == 0:
-        chat(username)
-    elif number == 1:
-        logout(username)
-    else:
-        print("Invalid Request")
+    while True:
+        try:
+            number = int(input("Enter 0 to chat with a user, print 1 to logout-> "))
+            if number == 0:
+                chat(username)
+            elif number == 1:
+                logout(username)
+            else:
+                print("Invalid Request")
+        except ValueError:
+            print("Invalid Input! Enter only numbers")
 
 def isServerRunning(host, portno):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -50,9 +54,10 @@ def chat(username):
     client(username)
 
 def logout(username):
-    print("Logging out.......")
     sleep(1)
+    print("Logging out.......")
     logout_session(username)
+    login()
 
 def register():
     print("Please enter your credentials-> ")
