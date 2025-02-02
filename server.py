@@ -4,55 +4,51 @@ from threading import Thread
 HOST = "127.0.0.1"
 PORT = 55555
 
-client_dict= {}#username in bytes
-
 def handle_client(client_socket, client_address, other_client_socket):
-    while True:
-        message = client_socket.recv(1024)
+    try:
+        while True:
+            message = client_socket.recv(1024)
 
-        if message.decode('utf-8').lower() == 'exit' or not message:
-            break
+            if not message or message.decode('utf-8').lower() == 'exit':
+                print(f"Client {client_address} disconnected.")
+                other_client_socket.sendall("The user you were talking to has quit. Please type in exit".encode('utf-8'))
+                other_client_socket.close()
+                client_socket.close()
+                return 
 
-        print(f"{message.decode('utf-8')} received from Username: {client_dict[client_socket].decode('utf-8')}, Address:{client_address}")
-
-        other_client_socket.sendall(message)
-
+            print(f"Received: {message.decode('utf-8')} from {client_address}")
+            other_client_socket.sendall(message)
+    except (ConnectionResetError, BrokenPipeError):
+        print(f"Connection lost with {client_address}.")
+        other_client_socket.close()
+        client_socket.close()
 
 def start_server():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        s.bind((HOST, PORT))
-        s.listen(2) 
+    while True: 
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind((HOST, PORT))
+            s.listen(2)
 
-        print("Server Started and listening for incoming clients........")
+            print("Server is waiting for two users...")
 
-        client1_socket, client1_address = s.accept()
-        print(f"Received client1 with address: {client1_address}")
+            client1_socket, client1_address = s.accept()
+            print(f"Client 1 connected: {client1_address}")
 
-        client2_socket, client2_address = s.accept()
-        print(f"Received client2 with address: {client2_address}")
+            client2_socket, client2_address = s.accept()
+            print(f"Client 2 connected: {client2_address}")
 
-        #first recieve usernames
-        username1 = client1_socket.recv(1024)
-        username2 = client2_socket.recv(1024)
+            username1 = client1_socket.recv(1024)
+            username2 = client2_socket.recv(1024)
 
-        #adding them to dict
-        client_dict[client1_socket] = username1
-        client_dict[client2_socket] = username2
+            client2_socket.sendall(username1)
+            client1_socket.sendall(username2)
 
-        #sending the username to other client for rsa
-        client2_socket.sendall(client_dict[client1_socket])
-        client1_socket.sendall(client_dict[client2_socket])
-
-        Thread(target = handle_client, args = (client1_socket, client1_address, client2_socket)).start()
-        Thread(target = handle_client, args = (client2_socket, client2_address, client1_socket)).start() 
-    
-    s.close()
+            Thread(target=handle_client, args=(client1_socket, client1_address, client2_socket)).start()
+            Thread(target=handle_client, args=(client2_socket, client2_address, client1_socket)).start()
 
 def main():
     start_server()
 
-
 if __name__ == "__main__":
     main()
-     

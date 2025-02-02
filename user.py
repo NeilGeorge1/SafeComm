@@ -4,6 +4,7 @@ import socket
 import getpass
 import secrets
 import subprocess
+import sys
 from client import main as client
 from server import main as server
 
@@ -14,7 +15,12 @@ def expire_session_id():
 	pass
 
 def login():
+    print("Type EXIT at username to quit the app")
     username = input("Enter Username-> ")
+    if username == 'EXIT':
+        print("Exiting.... ")
+        sleep(1)
+        sys.exit()
     password = getpass.getpass("Enter your password: ")
 
     print("Authenticating......")

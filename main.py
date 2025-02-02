@@ -1,5 +1,6 @@
 from user import login, dashboard, register, logout
 from db_operations import if_logged_in, logout_session
+from time import sleep
 
 def main():
     print("Welcome to SafeComm!")
@@ -23,6 +24,8 @@ def main():
             elif condition == 2:
                 register()
             else:
+                print("Exiting.... ")
+                sleep(1)
                 break
 
         except ValueError:
